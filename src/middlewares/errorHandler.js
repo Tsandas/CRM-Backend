@@ -1,9 +1,14 @@
 const errorHandling = (err, req, res, next) => {
-  console.log(err.stack);
-  res.status(500).json({
-    status: 500,
-    message: "Something went wrong",
-    error: err.message,
+  const message = err.customMessage || "Something went wrong";
+  res.status(err.statusCode || 500).json({
+    success: false,
+    error: {
+      message,
+      details: process.env.NODE_ENV != "production" ? err.message : undefined,
+    },
+    meta: {
+      status: err.statusCode || 500,
+    },
   });
 };
 

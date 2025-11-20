@@ -23,7 +23,10 @@ export const verifyToken = (req, res, next) => {
       console.log("The decoded user is: ", req.data);
       next();
     } catch (error) {
-      return responseHandler(res, 400, "Access token not valid");
+      if (error.name === "TokenExpiredError") {
+        return responseHandler(res, 401, "Access token expired");
+      }
+      next(error);
     }
   } else {
     return responseHandler(
@@ -53,7 +56,11 @@ export const verifyRefreshToken = (req, res, next) => {
       console.log("The decoded user is: ", req.data);
       next();
     } catch (error) {
-      return responseHandler(res, 400, "Refresh token not valid");
+      console.log(error.message);
+      if (error.name === "TokenExpiredError") {
+        return responseHandler(res, 401, "Refresh token expired");
+      }
+      next(error);
     }
   } else {
     return responseHandler(

@@ -1,4 +1,4 @@
 .env
 node_modules/
-secrets/
+secrets/cert.crt
 Tasks.txt

@@ -14,8 +14,8 @@ export const authLogin = async (req, res, next) => {
       return responseHandler(res, 404, "Invalid username or password", null);
     }
     return responseHandler(res, 200, "Log in succesfull", logInStatus);
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 };
 

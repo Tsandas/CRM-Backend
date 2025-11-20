@@ -45,7 +45,6 @@ export const loginService = async (username, plainPassword) => {
   };
 };
 
-
 const storeRefreshToken = async (username, refreshToken) => {
   await redis.set(
     `refresh_token:${username}`,

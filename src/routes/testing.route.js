@@ -1,6 +1,7 @@
 import express from "express";
 import { verifyToken } from "../middlewares/authMiddleware.js";
 import { authorizeRole } from "../middlewares/roleMiddleware.js";
+import { responseHandler } from "../utils/responseHandler.js";
 const router = express.Router();
 
 // Everyone can access
@@ -17,7 +18,7 @@ router.get("/getUsers", (req, res) => {
       role: "member",
     });
   }
-  res.json({ users });
+  return responseHandler(res, 200, "Users Fetched", users);
 });
 
 // Admin only
