@@ -24,7 +24,7 @@ export const loginService = async (username, plainPassword) => {
       username: agent.username,
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "3m" }
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRES }
   );
   const refreshToken = jwt.sign(
     {
@@ -33,7 +33,7 @@ export const loginService = async (username, plainPassword) => {
       username: agent.username,
     },
     process.env.REFRESH_TOKEN_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES }
   );
   await storeRefreshToken(username, refreshToken);
   return {

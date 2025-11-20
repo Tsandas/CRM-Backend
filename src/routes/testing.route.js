@@ -4,8 +4,20 @@ import { authorizeRole } from "../middlewares/roleMiddleware.js";
 const router = express.Router();
 
 // Everyone can access
-router.get("/everyone", (req, res) => {
-  res.json({ message: "Everyone" });
+router.get("/sayHello", (req, res) => {
+  res.json({ message: "Hello World" });
+});
+
+router.get("/getUsers", (req, res) => {
+  const users = [];
+  for (let i = 1; i <= 100; i++) {
+    users.push({
+      id: i,
+      name: `User ${i}`,
+      role: "member",
+    });
+  }
+  res.json({ users });
 });
 
 // Admin only

@@ -1,7 +1,10 @@
 import { loginService } from "../models/authModel.js";
 import { responseHandler } from "../utils/responseHandler.js";
 import { redis } from "../config/redis.js";
+import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+
+dotenv.config();
 
 export const authLogin = async (req, res, next) => {
   try {
@@ -19,9 +22,8 @@ export const authLogin = async (req, res, next) => {
 export const refreshToken = async (req, res, next) => {
   try {
     const storedToken = await redis.get(`refresh_token:${req.data.username}`);
-    console.log(req.refresh_token, storedToken);
-    if (storedToken !== storedToken) {
-      return responseHandler(res, 401, "Invalid refresh token provided")
+    if (storedToken !== req.refresh_token) {
+      return responseHandler(res, 401, "Invalid refresh token provided");
     }
     const accessToken = jwt.sign(
       {
@@ -31,10 +33,12 @@ export const refreshToken = async (req, res, next) => {
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "15m",
+        expiresIn: process.env.ACCESS_TOKEN_EXPIRES,
       }
     );
-    return responseHandler(res, 200, "Access token refreshed succesfully", {accessToken: accessToken})
+    return responseHandler(res, 200, "Access token refreshed succesfully", {
+      accessToken: accessToken,
+    });
   } catch (error) {
     next(error);
   }
