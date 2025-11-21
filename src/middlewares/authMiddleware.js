@@ -52,7 +52,7 @@ export const verifyRefreshToken = (req, res, next) => {
     try {
       const decode = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
       req.data = decode;
-      req.refresh_token = token;
+      req.refreshToken = token;
       console.log("The decoded user is: ", req.data);
       next();
     } catch (error) {

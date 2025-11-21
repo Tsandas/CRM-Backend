@@ -6,12 +6,7 @@ export const authLogin = async (req, res, next) => {
   try {
     const logInStatus = await loginService(username, password);
     if (!logInStatus) {
-      return responseHandler(
-        res,
-        404,
-        "Invalid username or password",
-        null
-      );
+      return responseHandler(res, 404, "Invalid username or password", null);
     }
     return responseHandler(res, 200, "Log in succesfull", logInStatus);
   } catch (err) {

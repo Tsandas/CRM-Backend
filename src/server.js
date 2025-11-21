@@ -3,9 +3,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import errorHandling from "./middlewares/errorHandler.js";
-import authRoutes from "./routes/auth.route.js"
-import testingRoutes from "./routes/testing.route.js"
-
+import authRoutes from "./routes/auth.route.js";
+import testingRoutes from "./routes/testing.route.js";
 dotenv.config();
 const app = express();
 
@@ -14,16 +13,12 @@ const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   message: "Too many requests from this IP. Try again in one hour.",
 });
-
+app.use(express.json({ limit: "5kb" }));
 app.use("/api", limiter);
-app.use(express.json());
-app.use(cors());
-
-
+// app.use(cors());
 
 app.use("/api/testing", testingRoutes);
 app.use("/api/auth", authRoutes);
-
 
 app.use(errorHandling);
 

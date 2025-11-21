@@ -21,6 +21,51 @@ router.get("/getUsers", (req, res) => {
   return responseHandler(res, 200, "Users Fetched", users);
 });
 
+router.get("/getUsersAuth", (req, res) => {
+  if (req.headers.authorization === "123") {
+    const users = [];
+    for (let i = 1; i <= 100; i++) {
+      users.push({
+        id: i,
+        name: `User ${i}`,
+        role: "member",
+      });
+    }
+    return responseHandler(res, 200, "Users Fetched", users);
+  } else {
+    return responseHandler(
+      res,
+      401,
+      "Include in your Headers.authorization the token"
+    );
+  }
+});
+
+router.post("/pushDataAuth", (req, res) => {
+  const authHeader = req.headers.authorization;
+  let token;
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    token = authHeader.split(" ")[1];
+    if (!token) {
+      return responseHandler(
+        res,
+        401,
+        "Include the correct token in Headers.authorization"
+      );
+    }
+  }
+
+  if (token != "123") {
+    return responseHandler(res, 401, "Not correct");
+  } else {
+    return responseHandler(res, 200, "Ok", req.body);
+  }
+});
+
+router.post("/pushData", (req, res) => {
+  return responseHandler(res, 200, "Post request received", req.body);
+});
+
 // Admin only
 router.get("/admin", verifyToken, authorizeRole("admin"), (req, res) => {
   res.json({ message: "Admin" });

@@ -1,4 +1,4 @@
-import { loginService } from "../models/authModel.js";
+import { loginService, agentExistsService } from "../models/authModel.js";
 import { responseHandler } from "../utils/responseHandler.js";
 import { redis } from "../config/redis.js";
 import dotenv from "dotenv";
@@ -19,15 +19,39 @@ export const authLogin = async (req, res, next) => {
   }
 };
 
+export const authRegister = async (req, res) => {
+  try {
+    const { agentId, username } = req.body;
+    const agentExists = await agentExistsService(agentId, username);
+    console.log("Exists: " + agentExists);
+    if (agentExists) {
+      return responseHandler(
+        res,
+        409,
+        "Agent with this agentId or username already exists"
+      );
+    }
+    // create user
+    return responseHandler(
+      res,
+      200,
+      "Agent is valid (Agent won't be created for now)",
+      req.body
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const refreshToken = async (req, res, next) => {
   try {
     const storedToken = await redis.get(`refresh_token:${req.data.username}`);
-    if (storedToken !== req.refresh_token) {
+    if (storedToken !== req.refreshToken) {
       return responseHandler(res, 401, "Invalid refresh token provided");
     }
     const accessToken = jwt.sign(
       {
-        agent_id: req.data.agent_id,
+        agent_id: req.data.agentId,
         role: req.data.role,
         username: req.data.username,
       },

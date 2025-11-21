@@ -19,7 +19,7 @@ export const loginService = async (username, plainPassword) => {
   if (!match) return null;
   const accessToken = jwt.sign(
     {
-      agent_id: agent.agent_id,
+      agentId: agent.agentId,
       role: agent.role,
       username: agent.username,
     },
@@ -28,7 +28,7 @@ export const loginService = async (username, plainPassword) => {
   );
   const refreshToken = jwt.sign(
     {
-      agent_id: agent.agent_id,
+      agentId: agent.agentId,
       role: agent.role,
       username: agent.username,
     },
@@ -37,7 +37,7 @@ export const loginService = async (username, plainPassword) => {
   );
   await storeRefreshToken(username, refreshToken);
   return {
-    agent_id: agent.agent_id,
+    agentId: agent.agentId,
     username: agent.username,
     role: agent.role,
     accessToken: accessToken,
@@ -52,4 +52,15 @@ const storeRefreshToken = async (username, refreshToken) => {
     "EX",
     7 * 24 * 60 * 60
   );
+};
+
+export const agentExistsService = async (agentId, username) => {
+  const query = `SELECT 1
+    FROM agents
+    WHERE agent_id = $1
+      OR username = $2
+    LIMIT 1;`;
+  const result = await pool.query(query, [agentId, username]);
+  const agentExists = result.rows.length > 0;
+  return agentExists;
 };

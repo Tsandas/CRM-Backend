@@ -15,7 +15,7 @@ const agentScheme = Joi.object({
   updatedAt: Joi.date().required(),
 });
 
-const validateAgent = (req, res, next) => {
+const validateAgentScheme = (req, res, next) => {
   const { error } = agentScheme.validate(req.body);
   if (error) {
     error.customMessage =
@@ -25,4 +25,4 @@ const validateAgent = (req, res, next) => {
   next();
 };
 
-export default validateAgent;
+export default validateAgentScheme;
