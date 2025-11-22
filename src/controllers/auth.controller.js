@@ -1,4 +1,8 @@
-import { loginService, agentExistsService } from "../models/authModel.js";
+import {
+  loginService,
+  agentExistsService,
+  createAgentService,
+} from "../models/authModel.js";
 import { responseHandler } from "../utils/responseHandler.js";
 import { redis } from "../config/redis.js";
 import dotenv from "dotenv";
@@ -23,7 +27,6 @@ export const authRegister = async (req, res) => {
   try {
     const { agentId, username } = req.body;
     const agentExists = await agentExistsService(agentId, username);
-    console.log("Exists: " + agentExists);
     if (agentExists) {
       return responseHandler(
         res,
@@ -32,6 +35,7 @@ export const authRegister = async (req, res) => {
       );
     }
     // create user
+    // createAgentService(req.body);
     return responseHandler(
       res,
       200,

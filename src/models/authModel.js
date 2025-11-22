@@ -3,18 +3,20 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { redis } from "../config/redis.js";
+import { mapAgentRow } from "../utils/Mapping/mapAgent.js";
 
 dotenv.config();
 export const loginService = async (username, plainPassword) => {
   const query = `
     SELECT *
-    FROM agents 
+    FROM agents
     WHERE username = $1
     LIMIT 1
   `;
   const result = await pool.query(query, [username]);
-  const agent = result.rows[0];
-  if (!agent) return null;
+  const data = result.rows[0];
+  if (!data) return null;
+  const agent = mapAgentRow(data);
   const match = await bcrypt.compare(plainPassword, agent.password);
   if (!match) return null;
   const accessToken = jwt.sign(
@@ -64,3 +66,5 @@ export const agentExistsService = async (agentId, username) => {
   const agentExists = result.rows.length > 0;
   return agentExists;
 };
+
+export const createAgentService = async (agentData) => {};
