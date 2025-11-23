@@ -10,6 +10,7 @@ if (process.env.NODE_ENV === "production") {
     rejectUnauthorized: true,
     ca: process.env.CA,
   };
+  console.log("Using ca directly");
 } else {
   sslConfig = {
     rejectUnauthorized: true,
