@@ -4,7 +4,7 @@ const errorHandling = (err, req, res, next) => {
     success: false,
     error: {
       message,
-      details: process.env.NODE_ENV != "production" ? err.message : undefined,
+      details: process.env.NODE_ENV != "LATER PUT PRODUCTION HERE" ? err.message : undefined,
     },
     meta: {
       status: err.statusCode || 500,
