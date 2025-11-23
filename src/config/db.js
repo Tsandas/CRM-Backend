@@ -8,7 +8,7 @@ let sslConfig;
 if (process.env.NODE_ENV === "production") {
   sslConfig = {
     rejectUnauthorized: true,
-    ca: process.env.CA,
+    ca: process.env.CA.replace(/\\n/g, "\n"),
   };
   console.log("Using ca directly");
 } else {
