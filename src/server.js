@@ -5,6 +5,8 @@ import rateLimit from "express-rate-limit";
 import errorHandling from "./middlewares/errorHandler.js";
 import authRoutes from "./routes/auth.route.js";
 import testingRoutes from "./routes/testing.route.js";
+import performance from "./routes/performance-testing.route.js";
+
 dotenv.config();
 const app = express();
 
@@ -18,6 +20,7 @@ app.use("/api", limiter);
 // app.use(cors());
 
 app.use("/api/testing", testingRoutes);
+app.use("/api/performance", performance);
 app.use("/api/auth", authRoutes);
 
 app.use(errorHandling);
