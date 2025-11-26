@@ -55,16 +55,3 @@ const storeRefreshToken = async (username, refreshToken) => {
     7 * 24 * 60 * 60
   );
 };
-
-export const agentExistsService = async (agentId, username) => {
-  const query = `SELECT 1
-    FROM agents
-    WHERE agent_id = $1
-      OR username = $2
-    LIMIT 1;`;
-  const result = await pool.query(query, [agentId, username]);
-  const agentExists = result.rows.length > 0;
-  return agentExists;
-};
-
-export const createAgentService = async (agentData) => {};

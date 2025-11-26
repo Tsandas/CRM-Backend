@@ -2,9 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-import errorHandling from "./middlewares/errorHandler.js";
+import errorHandling from "./middlewares/input-error/errorHandler.js";
 import authRoutes from "./routes/auth.route.js";
 import testingRoutes from "./routes/testing.route.js";
+import sysadminRoutes from "./routes/sysadmin.route.js";
 import performance from "./routes/performance-testing.route.js";
 
 dotenv.config();
@@ -17,8 +18,9 @@ const limiter = rateLimit({
 });
 app.use(express.json({ limit: "5kb" }));
 app.use("/api", limiter);
-// app.use(cors());
+app.use(cors());
 
+app.use("/api/sysadmin/", sysadminRoutes);
 app.use("/api/testing", testingRoutes);
 app.use("/api/performance", performance);
 app.use("/api/auth", authRoutes);

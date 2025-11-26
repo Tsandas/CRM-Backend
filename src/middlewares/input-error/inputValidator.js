@@ -20,6 +20,7 @@ const validateAgentScheme = (req, res, next) => {
   if (error) {
     error.customMessage =
       "Agents should follow the correct agentScheme. Check the correct Agent Scheme.";
+    error.statusCode = 400;
     return next(error);
   }
   next();
